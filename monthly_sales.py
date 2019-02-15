@@ -17,7 +17,7 @@ while True:
 	CSV_NAME = CSV_FILENAME+'.csv'
 	csv_filepath = os.path.join(CSV_NAME)
 	if not os.path.isfile(csv_filepath):
-	 	print("The file does not exist, please make sure to enter a file with correct format, e.g:'sales-201803'")
+	 	print("Sorry, this file does not exist, please make sure to enter a file with correct format, e.g:'sales-201803'")
 	else:
 	 	break
 #Taken and adapted from https://github.com/hiepnguyen034/data_dashboard/blob/master/exec_dash.py
@@ -75,20 +75,41 @@ for top_seller in top_sellers:
 
 
 ##Graph Output Setup (Taken from Chart Gallery exercise structure)
+#import matplotlib.pyplot as plt
+#
+##bar_data = [top_sellers]
+#
+#products = []
+#sales = []
+#
+#for d in top_sellers: 
+#  products.append(d["name"])
+#  sales.append(d["monthly_sales"])
+#
+#plt.bar(products, sales)
+#plt.ylabel("Sales (Dollars) ")
+#plt.xlabel("Products")
+#plt.title("Top Selling Products " + month_lookup(CSV_FILENAME[-2:])+' '+ str(CSV_FILENAME[6:10]))
+#plt.show()
 
 import matplotlib.pyplot as plt
-
-#bar_data = [top_sellers]
+import numpy as np
 
 products = []
 sales = []
 
-for d in top_sellers: #change d to dict
+for d in top_sellers: 
   products.append(d["name"])
   sales.append(d["monthly_sales"])
 
-plt.bar(products, sales)
-plt.ylabel("Sales (Dollars) ")
-plt.xlabel("Products")
-plt.title("Top Selling Products " + month_lookup(CSV_FILENAME[-2:])+' '+ str(CSV_FILENAME[6:10]))
+plt.rcdefaults()
+fig, ax = plt.subplots()
+
+ax.barh(products, sales, align='center',
+        color='blue', ecolor='black')
+ax.set_yticks(products)
+ax.set_yticklabels(products)
+ax.invert_yaxis()  
+ax.set_xlabel('Sales (Dollars)')
+ax.set_title("Top Selling Products " + month_lookup(CSV_FILENAME[-2:])+' '+ str(CSV_FILENAME[6:10]))
 plt.show()
