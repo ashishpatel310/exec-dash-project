@@ -3,6 +3,7 @@ import os
 import csv
 import itertools
 from operator import itemgetter
+import time 
 
 def month_lookup(month):
 	year_month={'01':'January','02':'February','03':'March','04':'April',
@@ -48,15 +49,18 @@ sorted_product_sales = sorted(product_sales, key=itemgetter("monthly_sales"), re
 top_sellers = sorted_product_sales[0:10] 
 
 print("----------------------------------------")
-print(f" MONTHLY SALES REPORT")
-print("-----------------------")
-print("TIME: "+ month_lookup(CSV_FILENAME[-2:])+' '+ str(CSV_FILENAME[6:10])) #taken from hiep 
-print("-----------------------")
-print("CRUNCHING THE DATA...")
+print(f"~~~~~~~~ MONTHLY SALES REPORT ~~~~~~~~~")
+print("----------------------------------------")
+print("REPORT DATE: "+ month_lookup(CSV_FILENAME[-2:])+' '+ str(CSV_FILENAME[6:10])) #taken from hiep 
+print("----------------------------------------")
+print("CALCULATING TOTAL SALES...")
+time.sleep(3)
 print("----------------------------------------")
 print(f"TOTAL SALES: {to_usd(total_monthly_sales)}")
-
-print("-------------------------")
+print("----------------------------------------")
+print("ANALYZING TOP SELLING PRODUCTS...")
+time.sleep(3)
+print("----------------------------------------")
 print("TOP SELLING PRODUCTS:")
 
 counter = 0
@@ -69,25 +73,8 @@ for top_seller in top_sellers:
 #Inspired from
 #https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/exercises/sales-reporting/csv_solution_further.py
 
-# breakpoint()
 
-##Graph Output Setup (Taken from Chart Gallery exercise structure)
-#import matplotlib.pyplot as plt
-#
-##bar_data = [top_sellers]
-#
-#products = []
-#sales = []
-#
-#for d in top_sellers: 
-#  products.append(d["name"])
-#  sales.append(d["monthly_sales"])
-#
-#plt.bar(products, sales)
-#plt.ylabel("Sales (Dollars) ")
-#plt.xlabel("Products")
-#plt.title("Top Selling Products " + month_lookup(CSV_FILENAME[-2:])+' '+ str(CSV_FILENAME[6:10]))
-#plt.show()
+#Graph Output Setup (Taken from Chart Gallery exercise structure)
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -104,7 +91,7 @@ plt.rcdefaults()
 fig, ax = plt.subplots()
 
 ax.barh(products, sales, align='center',
-        color='blue', ecolor='black')
+        color='purple', ecolor='black')
 ax.set_yticks(products)
 ax.set_yticklabels(products)
 ax.invert_yaxis() 
@@ -115,4 +102,3 @@ ax.xaxis.set_major_formatter(formatter)
 ax.set_title("Top Selling Products " + month_lookup(CSV_FILENAME[-2:])+' '+ str(CSV_FILENAME[6:10]))
 plt.show()
 #https://matplotlib.org/gallery/lines_bars_and_markers/barh.html
-
