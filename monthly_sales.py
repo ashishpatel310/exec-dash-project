@@ -25,10 +25,6 @@ while True:
 def to_usd(my_price):
     return "${0:,.2f}".format(my_price)
 
-#csv_filename = "sales-201803.csv" # TODO: allow user to specify
-#
-#csv_filepath = os.path.join(csv_filename)
-
 transactions = []
 
 with open(csv_filepath, "r") as csv_file:
@@ -54,7 +50,7 @@ top_sellers = sorted_product_sales[0:10]
 print("----------------------------------------")
 print(f" MONTHLY SALES REPORT")
 print("-----------------------")
-print("MONTH: March 2018") # TODO: get month and year
+print("TIME: "+ month_lookup(CSV_FILENAME[-2:])+' '+ str(CSV_FILENAME[6:10])) #taken from hiep 
 print("-----------------------")
 print("CRUNCHING THE DATA...")
 print("----------------------------------------")
@@ -80,19 +76,19 @@ for top_seller in top_sellers:
 
 ##Graph Output Setup (Taken from Chart Gallery exercise structure)
 
-#import matplotlib.pyplot as plt
-#
-#bar_data = [sorted_product_sales]
-#
-#products = []
-#sales = []
-#
-#for d in bar_data: #change d to dict
-#  products.append(d["name"])
-#  sales.append(d["monthly_sales"])
-#
-#plt.bar(products, sales)
-#plt.ylabel("Sales")
-#plt.xlabel("Products")
-#plt.show()
-#
+import matplotlib.pyplot as plt
+
+#bar_data = [top_sellers]
+
+products = []
+sales = []
+
+for d in top_sellers: #change d to dict
+  products.append(d["name"])
+  sales.append(d["monthly_sales"])
+
+plt.bar(products, sales)
+plt.ylabel("Sales (Dollars) ")
+plt.xlabel("Products")
+plt.title("Top Selling Products " + month_lookup(CSV_FILENAME[-2:])+' '+ str(CSV_FILENAME[6:10]))
+plt.show()
