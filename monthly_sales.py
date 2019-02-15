@@ -1,88 +1,64 @@
-
 import os
 import csv
 import itertools
 from operator import itemgetter
 
-def to_usd(my_price):
-    return "${0:,.2f}".format(my_price)
-
 #
-# INPUTS
+# INFO INPUTS
 #
 
-csv_filename = "sales-201803.csv" # TODO: allow user to specify
+CSV_FILENAME = "sales-201803.csv"
 
-csv_filepath = os.path.join(csv_filename)
+csv_filepath = os.path.join(CSV_FILENAME)
 
-transactions = []
+rows = []
 
 with open(csv_filepath, "r") as csv_file:
     reader = csv.DictReader(csv_file)
     for od in reader:
-        transactions.append(dict(od)) 
+        rows.append(dict(od)) # ideally we would transform all the prices from strings to floats here
 
-sales_prices = [float(transaction["sales price"]) for transaction in transactions] 
-total_monthly_sales = sum(sales_prices)
+sales_prices = [float(row["sales price"]) for row in rows] # list comprehension for mapping purposes!
+total_sales = sum(sales_prices)
+
+#breakpoint()
 
 product_sales = []
 
-sorted_transactions = sorted(transactions, key=itemgetter("product"))
-transactions_by_product = itertools.groupby(sorted_transactions, key=itemgetter("product"))
+sorted_rows = sorted(rows, key=itemgetter("product"))
+rows_by_product = itertools.groupby(sorted_rows, key=itemgetter("product")) #> <itertools.groupby object at 0x10339dc50>
 
-for product, product_transactions in transactions_by_product:
-    monthly_sales = sum([float(transaction["sales price"]) for transaction in product_transactions])
+for product, product_rows in rows_by_product:
+    monthly_sales = sum([float(row["sales price"]) for row in product_rows]) # list comprehension for mapping purposes!
     product_sales.append({"name": product, "monthly_sales": monthly_sales})
 
 sorted_product_sales = sorted(product_sales, key=itemgetter("monthly_sales"), reverse=True)
-top_sellers = sorted_product_sales[0:10] 
+top_sellers = sorted_product_sales[0:3] # first three items in a list :-)
 
-print(top_sellers)
-
-#Inspired from
-#https://github.com/prof-rossetti/georgetown-opim-243-201901/blob/master/exercises/sales-reporting/csv_solution_further.py
-
-# breakpoint()
+month = "MARCH" # TODO: get from file name or date values
+year = 2018 # TODO: get from file name or date values
 
 #
-# OUTPUTS
+# INFO OUTPUTS
 #
-#
-#print("-----------------------")
-#print("MONTH: March 2018") # TODO: get month and year
-#
-#print("-----------------------")
-#print("CRUNCHING THE DATA...")
-#
-#print("-----------------------")
-#print(f"TOTAL MONTHLY SALES: {to_usd(monthly_total)}")
-#
-#print("-----------------------")
-#print("TOP SELLING PRODUCTS:")
-#
-#rank = 1
-#for d in top_sellers:
-#    print("  " + str(rank) + ") " + d["name"] + ": " + to_usd(d["monthly_sales"]))
-#    rank = rank + 1
-#
-#print("-----------------------")
-#print("VISUALIZING THE DATA...")
-#
-#
-##Graph Output Setup (Taken from Chart Gallery exercise structure)
-#
-#import matplotlib.pyplot as plt
-#
-#bar_data = [
-#]
-#
-#products = []
-#sales = []
-#
-#for s in bar_data:
-#  products.append(s["products"])
-#  sales.append(s["sales"])
-#plt.bar(products, sales)
-#plt.ylabel("Products")
-#plt.xlabel("Sales")
-#plt.show()
+
+def to_usd(my_price):
+  return f"${my_price:,.2f}"
+
+print("-------------------------")
+print(f"SALES REPORT!")
+print("-------------------------")
+print(f"MONTH: {month} {year}")
+print(f"TOTAL SALES: {to_usd(total_sales)}")
+
+print("-------------------------")
+print("TOP SELLING PRODUCTS:")
+
+counter = 0
+for top_seller in top_sellers:
+    counter = counter + 1
+    product_name = top_seller["name"]
+    sales_usd = to_usd(top_seller["monthly_sales"])
+    print(f"  {counter}. {product_name} ({sales_usd})")
+
+    
