@@ -1,3 +1,4 @@
+
 import os
 import csv
 import itertools
@@ -21,7 +22,10 @@ with open(csv_filepath, "r") as csv_file:
     for od in reader:
         transactions.append(dict(od)) 
 
-print(transactions)
+sales_prices = [float(transaction["sales price"]) for transaction in transactions] 
+total_monthly_sales = sum(sales_prices)
+
+print(total_monthly_sales)
 
 # breakpoint()
 
