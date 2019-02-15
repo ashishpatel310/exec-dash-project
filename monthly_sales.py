@@ -15,7 +15,7 @@ def month_lookup(month):
 while True:
 	CSV_FILENAME = input('Please enter the time period in the format sales-YYYYMM: ')
 	CSV_NAME = CSV_FILENAME+'.csv'
-	csv_filepath = os.path.join(CSV_NAME)
+	csv_filepath = os.path.join("data/", CSV_NAME)
 	if not os.path.isfile(csv_filepath):
 	 	print("Sorry, this file does not exist, please make sure to enter a file with correct format, e.g:'sales-201803'")
 	else:
@@ -71,9 +71,6 @@ for top_seller in top_sellers:
 
 # breakpoint()
 
-
-
-
 ##Graph Output Setup (Taken from Chart Gallery exercise structure)
 #import matplotlib.pyplot as plt
 #
@@ -94,6 +91,7 @@ for top_seller in top_sellers:
 
 import matplotlib.pyplot as plt
 import numpy as np
+import matplotlib.ticker as ticker
 
 products = []
 sales = []
@@ -109,7 +107,12 @@ ax.barh(products, sales, align='center',
         color='blue', ecolor='black')
 ax.set_yticks(products)
 ax.set_yticklabels(products)
-ax.invert_yaxis()  
+ax.invert_yaxis() 
+ax.set_ylabel('Product') 
 ax.set_xlabel('Sales (Dollars)')
+formatter = ticker.FormatStrFormatter('$%1.2f') #https://matplotlib.org/gallery/pyplots/dollar_ticks.html
+ax.xaxis.set_major_formatter(formatter)
 ax.set_title("Top Selling Products " + month_lookup(CSV_FILENAME[-2:])+' '+ str(CSV_FILENAME[6:10]))
 plt.show()
+#https://matplotlib.org/gallery/lines_bars_and_markers/barh.html
+
